@@ -13,15 +13,21 @@ public class SeleniumTestExample
     }
 
 
-    [SetUp]
-    public void SetUp()
+    [OneTimeSetUp]
+    public void OneTimeSetup()
     {
         driver = new ChromeDriver();
         driver?.Manage().Window.Maximize();
     }
 
-    [TearDown]
-    public void TearDown()
+    [SetUp]
+    public void SetUp()
+    {
+        driver.Navigate().GoToUrl("https://www.saucedemo.com/");
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
     {
         driver?.Close();
         driver?.Quit();
@@ -30,7 +36,6 @@ public class SeleniumTestExample
     [Test]
     public void FirstTest()
     {
-        driver?.Navigate().GoToUrl("https://www.saucedemo.com/");
         var loginPageTitle = WaitForElement(By.ClassName("login_logo"));
         var usernameInput = driver.FindElement(By.Id("user-name"));
         usernameInput.SendKeys("standard_user");
@@ -52,5 +57,43 @@ public class SeleniumTestExample
         var description = driver.FindElement(By.XPath("//div[@data-test='inventory-item-desc']")).Text;
 
         Assert.That(description, Is.EqualTo(firtsProductText), "Wrong product details text is on product page");
+    }
+
+    [Test]
+    public void UnsuccessfulLoginEmptyCredentials()
+    {
+        var loginPageTitle = WaitForElement(By.ClassName("login_logo"));
+        var usernameInput = driver.FindElement(By.Id("user-name"));
+        var passwordInput = driver.FindElement(By.Id("password"));
+        var loginButton = driver.FindElement(By.Id("login-button"));
+        loginButton.Click();
+        var errorMessage = driver.FindElement(By.CssSelector("[data-test='error']"));
+
+        Assert.That(errorMessage.Displayed, Is.True, "Error message is not displayed");
+
+        var actualErrorText = errorMessage.Text;
+        var expectedErrorText = "Epic sadface: Username is required";
+
+        Assert.That(actualErrorText, Is.EqualTo(expectedErrorText), "Wrong error message text");
+    }
+
+    [Test]
+    public void UnsuccessfulLoginInvalidCredentials()
+    {
+        var loginPageTitle = WaitForElement(By.ClassName("login_logo"));
+        var usernameInput = driver.FindElement(By.Id("user-name"));
+        usernameInput.SendKeys("invalid_user");
+        var passwordInput = driver.FindElement(By.Id("password"));
+        passwordInput.SendKeys("invalid_password");
+        var loginButton = driver.FindElement(By.Id("login-button"));
+        loginButton.Click();
+        var errorMessage = driver.FindElement(By.CssSelector("[data-test='error']"));
+
+        Assert.That(errorMessage.Displayed, Is.True, "Error message is not displayed");
+
+        var actualErrorText = errorMessage.Text;
+        var expectedErrorText = "Epic sadface: Username and password do not match any user in this service";
+
+        Assert.That(actualErrorText, Is.EqualTo(expectedErrorText), "Wrong error message text");
     }
 }
