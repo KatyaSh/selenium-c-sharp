@@ -7,8 +7,6 @@ public class LoginTests : BaseTest
     public void UnsuccessfulLoginEmptyCredentials()
     {
         WaitForElement(By.ClassName("login_logo"));
-        var usernameInput = driver.FindElement(By.Id("user-name"));
-        var passwordInput = driver.FindElement(By.Id("password"));
         var loginButton = driver.FindElement(By.Id("login-button"));
         loginButton.Click();
         var errorMessage = driver.FindElement(By.CssSelector("[data-test='error']"));

@@ -6,6 +6,7 @@ public class BaseTest
 {
     protected IWebDriver driver;
     protected WebDriverWait webDriverWait;
+    protected const string BaseUrl = "https://www.saucedemo.com/";
 
     [OneTimeSetUp]
     public void OneTimeSetup()
@@ -25,7 +26,7 @@ public class BaseTest
     [SetUp]
     public void SetUp()
     {
-        driver.Navigate().GoToUrl("https://www.saucedemo.com/");
+        driver.Navigate().GoToUrl(BaseUrl);
     }
 
     [OneTimeTearDown]
@@ -60,6 +61,7 @@ public class BaseTest
 
         Assert.That(actualUrl, Is.EqualTo(expectedUrl), "Wrong URL for main page");
     }
+
     public void ClearCartBeforeTest()
     {
         driver.Navigate().GoToUrl("https://www.saucedemo.com/inventory.html");
@@ -67,10 +69,8 @@ public class BaseTest
         var cartLink = driver.FindElement(By.CssSelector("[data-test='shopping-cart-link']"));
         cartLink.Click();
 
-        var removeButtons = driver.FindElements(By.XPath("//button[starts-with(@id, 'remove-')]"));
-        foreach (var btn in removeButtons)
-        {
-            btn.Click();
-        }
+        driver.FindElements(By.XPath("//button[starts-with(@id, 'remove-')]"))
+       .ToList()
+       .ForEach(btn => btn.Click());
     }
 }

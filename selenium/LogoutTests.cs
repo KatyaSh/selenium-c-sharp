@@ -1,12 +1,11 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 
-public class LogoutTests : BaseTest
+public class LogoutTests : BaseTestSuccesfullLogin
 {
     [Test]
     public void Logout()
     {
-        SuccesfullLogin("standard_user", "secret_sauce");
         var burgerMenuButton = driver.FindElement(By.Id("react-burger-menu-btn"));
         burgerMenuButton.Click();
         //var logoutButton = WaitForElement(By.Id("logout_sidebar_link"));
@@ -15,7 +14,7 @@ public class LogoutTests : BaseTest
         );
         logoutButton.Click();
         var actualUrl = driver.Url;
-        var expectedUrl = "https://www.saucedemo.com/";
+        var expectedUrl = BaseUrl;
 
         Assert.That(actualUrl, Is.EqualTo(expectedUrl), "Wrong URL for Login page");
     }
