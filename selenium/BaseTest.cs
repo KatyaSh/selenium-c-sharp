@@ -1,25 +1,19 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
+
+[Parallelizable(ParallelScope.All)]
 public class BaseTest
 {
-    protected IWebDriver driver;
-    protected WebDriverWait webDriverWait;
+    protected static IWebDriver driver;
+    protected static WebDriverWait webDriverWait;
+
     protected const string BaseUrl = "https://www.saucedemo.com/";
 
     [OneTimeSetUp]
-    public void OneTimeSetup()
+    public void OneTimeSetUp()
     {
-        var options = new ChromeOptions();
-        options.AddArgument("--disable-infobars");
-        options.AddArgument("--disable-notifications");
-        options.AddUserProfilePreference("credentials_enable_service", false);
-        options.AddUserProfilePreference("profile.password_manager_enabled", false);
-        options.AddArgument("--incognito");
-
-        driver = new ChromeDriver(options);
-        driver.Manage().Window.Maximize();
+        driver = WebDriverFactory.GetDriver(BrowserType.Chrome);
         webDriverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
     }
 
@@ -32,26 +26,21 @@ public class BaseTest
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        driver?.Close();
-        driver?.Quit();
+        WebDriverFactory.QuitDriver();
     }
 
     public IWebElement WaitForElement(By locator)
     {
-        return webDriverWait?.Until(drv => drv.FindElement(by: locator))!;
+        return webDriverWait.Until(drv => drv.FindElement(locator));
     }
 
     public void Login(string username, string password)
     {
         WaitForElement(By.ClassName("login_logo"));
-        var usernameInput = driver.FindElement(By.Id("user-name"));
-        usernameInput.SendKeys(username);
-        var passwordInput = driver.FindElement(By.Id("password"));
-        passwordInput.SendKeys(password);
-        var loginButton = driver.FindElement(By.Id("login-button"));
-        loginButton.Click();
+        driver.FindElement(By.Id("user-name")).SendKeys(username);
+        driver.FindElement(By.Id("password")).SendKeys(password);
+        driver.FindElement(By.Id("login-button")).Click();
     }
-
     public void SuccesfullLogin(string username, string password)
     {
         Login(username, password);
