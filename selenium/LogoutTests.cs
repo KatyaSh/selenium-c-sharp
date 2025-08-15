@@ -7,8 +7,7 @@ public class LogoutTests : BaseTestSuccesfullLogin
     public void Logout()
     {
         var burgerMenuButton = driver.FindElement(By.Id("react-burger-menu-btn"));
-        burgerMenuButton.Click();
-        //var logoutButton = WaitForElement(By.Id("logout_sidebar_link"));
+        burgerMenuButton.Click();       
         var logoutButton = webDriverWait.Until(
             SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.Id("logout_sidebar_link"))
         );
