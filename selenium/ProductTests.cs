@@ -4,6 +4,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System.Diagnostics;
 
+[Parallelizable]
 public class ProductTests : BaseTestSuccesfullLogin
 {
     [Test]
