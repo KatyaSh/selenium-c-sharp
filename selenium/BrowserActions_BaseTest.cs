@@ -7,7 +7,7 @@ using SeleniumExtras.WaitHelpers;
 public class BrowserActions_BaseTest
 {
     protected static IWebDriver driver;
-    protected static WebDriverWait webDriverWait;
+    protected static WebDriverWait webDriverWait; 
 
     protected const string BaseUrl = "http://the-internet.herokuapp.com/";
 
@@ -32,7 +32,8 @@ public class BrowserActions_BaseTest
 
     public IWebElement WaitForElement(By locator)
     {
-        return webDriverWait.Until(drv => drv.FindElement(locator));
+        return webDriverWait.Until(
+            SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(locator));
     }
 
     public IWebElement WaitForElementVisible(IWebDriver driver, By locator, int timeoutSeconds)
@@ -41,4 +42,24 @@ public class BrowserActions_BaseTest
         return wait.Until(ExpectedConditions.ElementIsVisible(locator));
     }
 
+    public void ClickLinkByText(string linkText)
+    {
+        var element = webDriverWait.Until(
+            SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(
+                By.XPath($"//li/a[text()='{linkText}']")));
+
+        ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+
+        element.Click();
+
+        WaitForElement(By.XPath($"//div/h3[contains(text(), '{linkText}')]"));
+    }
+
+    public void ClickElementByXPath(string xpath)
+    {
+        var element = WaitForElement(By.XPath(xpath));
+        IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+        js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
+        element.Click();
+    }
 }
