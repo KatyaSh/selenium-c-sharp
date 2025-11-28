@@ -29,8 +29,16 @@ public class WebDriverFactory
                 chromeOptions.AddUserProfilePreference("profile.password_manager_enabled", false);
                 chromeOptions.AddArgument("--incognito");
                 return new ChromeDriver(chromeOptions);
+            case BrowserType.ChromeHeadless:
+                var headlessOptions = new ChromeOptions();
+                headlessOptions.AddArgument("--disable-infobars");
+                headlessOptions.AddArgument("--disable-notifications");
+                headlessOptions.AddUserProfilePreference("credentials_enable_service", false);
+                headlessOptions.AddUserProfilePreference("profile.password_manager_enabled", false);
+                headlessOptions.AddArgument("--headless=new");                
+                return new ChromeDriver(headlessOptions);
             case BrowserType.Edge:
-                return new EdgeDriver();
+                return new EdgeDriver();           
             default:
                 throw new NotSupportedException($"Browser '{browser}' not supported.");
         }
@@ -38,7 +46,7 @@ public class WebDriverFactory
 
     public static void QuitDriver()
     {
-        _driver?.Quit();
+        _driver.Quit();
         _driver = null;
     }
 }
