@@ -11,16 +11,14 @@ public class CheckboxPageTests : BrowserActions_BaseTest
         availableExamplesPage.OpenExamplePage("Checkboxes");
         Assert.That(checkboxesPage.IsCheckboxesPageOpened(), Is.True, "Checkboxes page is not opened");
 
-        Assert.That(checkboxesPage.IsCheckbox1Displayed, Is.True, "Checkbox 1 is not displayed");
-        Assert.That(checkboxesPage.IsCheckbox2Displayed, Is.True, "Checkbox 2 is not displayed");
+        Assert.That(checkboxesPage.IsCheckboxDisplayed(0), Is.True, "Checkbox should be displayed");
+        Assert.That(checkboxesPage.IsCheckboxDisplayed(1), Is.True, "Checkbox should be displayed");
 
-        if (!checkboxesPage.IsCheckbox1Selected())
-            checkboxesPage.ClickCheckbox1();
-        Assert.That(checkboxesPage.IsCheckbox1Selected(), Is.True, "Checkbox 1 is not checked after clicking");
+        checkboxesPage.Check(0);
+        Assert.That(checkboxesPage.IsCheckboxSelected(0), Is.True, "Checkbox should be checked");
 
-        if (checkboxesPage.IsCheckbox1Selected())
-            checkboxesPage.ClickCheckbox1();
-        Assert.That(checkboxesPage.IsCheckbox1Selected(), Is.False, "Checkbox 1 is not unchecked after clicking again");
+        checkboxesPage.Uncheck(0);
+        Assert.That(checkboxesPage.IsCheckboxSelected(0), Is.False, "Checkbox should be unchecked");
     }
 
     [Test]
@@ -32,16 +30,14 @@ public class CheckboxPageTests : BrowserActions_BaseTest
         availableExamplesPage.OpenExamplePage("Checkboxes");
         Assert.That(checkboxesPage.IsCheckboxesPageOpened(), Is.True, "Checkboxes page is not opened");
 
-        Assert.That(checkboxesPage.IsCheckbox1Displayed, Is.True, "Checkbox 1 is not displayed");
-        Assert.That(checkboxesPage.IsCheckbox2Displayed, Is.True, "Checkbox 2 is not displayed");
+        Assert.That(checkboxesPage.IsCheckboxDisplayed(0), Is.True, "Checkbox should be displayed");
+        Assert.That(checkboxesPage.IsCheckboxDisplayed(1), Is.True, "Checkbox should be displayed");
 
-        if (!checkboxesPage.IsCheckbox1Selected())
-            checkboxesPage.ClickCheckbox1();
-        Assert.That(checkboxesPage.IsCheckbox1Selected(), Is.True, "Checkbox 1 is not checked after clicking");
+        checkboxesPage.Check(0);
+        Assert.That(checkboxesPage.IsCheckboxSelected(0), Is.True, "Checkbox should be checked");
 
-        if (!checkboxesPage.IsCheckbox2Selected())
-            checkboxesPage.ClickCheckbox2();
-        Assert.That(checkboxesPage.IsCheckbox2Selected(), Is.True, "Checkbox 2 is not checked after clicking");
+        checkboxesPage.Check(1);
+        Assert.That(checkboxesPage.IsCheckboxSelected(1), Is.True, "Checkbox should be checked");
     }
 
     [Test]
@@ -51,24 +47,21 @@ public class CheckboxPageTests : BrowserActions_BaseTest
         var checkboxesPage = new CheckboxesPage(driver);
         availableExamplesPage.OpenExamplePage("Checkboxes");
         Assert.That(checkboxesPage.IsCheckboxesPageOpened(), Is.True, "Checkboxes page is not opened");
-        Assert.That(checkboxesPage.IsCheckbox1Displayed, Is.True, "Checkbox 1 is not displayed");
-        Assert.That(checkboxesPage.IsCheckbox2Displayed, Is.True, "Checkbox 2 is not displayed");
 
-        if (!checkboxesPage.IsCheckbox1Selected())
-            checkboxesPage.ClickCheckbox1();
-        Assert.That(checkboxesPage.IsCheckbox1Selected(), Is.True, "Checkbox 1 is not checked after clicking");
+        Assert.That(checkboxesPage.IsCheckboxDisplayed(0), Is.True, "Checkbox should be displayed");
+        Assert.That(checkboxesPage.IsCheckboxDisplayed(1), Is.True, "Checkbox should be displayed");
 
-        if (checkboxesPage.IsCheckbox1Selected())
-            checkboxesPage.ClickCheckbox1();
-        Assert.That(checkboxesPage.IsCheckbox1Selected(), Is.False, "Checkbox 1 is not unchecked after clicking");
+        checkboxesPage.Check(0);
+        Assert.That(checkboxesPage.IsCheckboxSelected(0), Is.True, "Checkbox should be checked");
 
-        if (!checkboxesPage.IsCheckbox2Selected())
-            checkboxesPage.ClickCheckbox2();
-        Assert.That(checkboxesPage.IsCheckbox2Selected(), Is.True, "Checkbox 2 is not checked after clicking");       
+        checkboxesPage.Uncheck(0);
+        Assert.That(checkboxesPage.IsCheckboxSelected(0), Is.False, "Checkbox should be unchecked"); 
+        
+        checkboxesPage.Check(1);
+        Assert.That(checkboxesPage.IsCheckboxSelected(1), Is.True, "Checkbox should be checked");
 
-        if (checkboxesPage.IsCheckbox2Selected())
-            checkboxesPage.ClickCheckbox2();
-        Assert.That(checkboxesPage.IsCheckbox2Selected(), Is.False, "Checkbox 2 is not unchecked after clicking");
+        checkboxesPage.Uncheck(1);
+        Assert.That(checkboxesPage.IsCheckboxSelected(1), Is.False, "Checkbox should be unchecked");
     }
 
     [Test]
@@ -78,25 +71,21 @@ public class CheckboxPageTests : BrowserActions_BaseTest
         var checkboxesPage = new CheckboxesPage(driver);
         availableExamplesPage.OpenExamplePage("Checkboxes");
         Assert.That(checkboxesPage.IsCheckboxesPageOpened(), Is.True, "Checkboxes page is not opened");
-        Assert.That(checkboxesPage.IsCheckbox1Displayed, Is.True, "Checkbox 1 is not displayed");
-        Assert.That(checkboxesPage.IsCheckbox2Displayed, Is.True, "Checkbox 2 is not displayed");
 
-        if (!checkboxesPage.IsCheckbox1Selected())
-            checkboxesPage.ClickCheckbox1();
-        Assert.That(checkboxesPage.IsCheckbox1Selected(), Is.True, "Checkbox 1 is not checked after clicking");
+        Assert.That(checkboxesPage.IsCheckboxDisplayed(0), Is.True, "Checkbox should be displayed");
+        Assert.That(checkboxesPage.IsCheckboxDisplayed(1), Is.True, "Checkbox should be displayed");
 
-        if (checkboxesPage.IsCheckbox1Selected())
-            checkboxesPage.ClickCheckbox1();
-        Assert.That(checkboxesPage.IsCheckbox1Selected(), Is.False, "Checkbox 1 is not unchecked after clicking");
+        checkboxesPage.Check(0);
+        Assert.That(checkboxesPage.IsCheckboxSelected(0), Is.True, "Checkbox 1 is not checked after clicking");
 
-        if (!checkboxesPage.IsCheckbox1Selected())
-            checkboxesPage.ClickCheckbox1();
-        Assert.That(checkboxesPage.IsCheckbox1Selected(), Is.True, "Checkbox 1 is not checked after clicking");
+        checkboxesPage.Uncheck(0);
+        Assert.That(checkboxesPage.IsCheckboxSelected(0), Is.False, "Checkbox 1 is not unchecked after clicking");
 
-        if (checkboxesPage.IsCheckbox1Selected())
-            checkboxesPage.ClickCheckbox1();
-        Assert.That(checkboxesPage.IsCheckbox1Selected(), Is.False, "Checkbox 1 is not unchecked after clicking");
+        checkboxesPage.Check(0);
+        Assert.That(checkboxesPage.IsCheckboxSelected(0), Is.True, "Checkbox 1 is not checked after clicking");
+
+        checkboxesPage.Uncheck(0);
+        Assert.That(checkboxesPage.IsCheckboxSelected(0), Is.False, "Checkbox 1 is not unchecked after clicking");
     }
-
 }
 

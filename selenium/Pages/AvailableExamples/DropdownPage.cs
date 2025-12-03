@@ -1,10 +1,11 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
 public class DropdownPage
 {
     private IWebDriver driver;
-    private readonly By dropdownPageHeader = By.XPath($"//div/h3[contains(text(), 'Dropdown List')]");
+    private readonly By dropdownPageHeader = By.XPath("//div[@class='example']");
     private readonly By dropdownSelect = By.Id("dropdown");
 
     public DropdownPage(IWebDriver driver)
@@ -19,7 +20,22 @@ public class DropdownPage
 
     public bool IsDropdownPageOpened()
     {
-        return WaitUtils.WaitForElementVisible(driver, dropdownPageHeader, 20).Displayed;
+        return WaitUtils.WaitForElementIsVisible(driver, dropdownPageHeader, 20).Displayed;
+    }
+
+    public void SelectByText(string text)
+    {
+        SelectDropdown().SelectByText(text);
+    }
+
+    public string GetSelectedOptionText()
+    {
+        return SelectDropdown().SelectedOption.Text;
+    }
+
+    public List<string> GetSelectDropdownOptions()
+    {
+        var select = SelectDropdown();
+        return select.Options.Select(o => o.Text).ToList();
     }
 }
-

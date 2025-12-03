@@ -3,52 +3,39 @@
 public class CheckboxesPage
 {
     private IWebDriver driver;
-    private readonly By checkbox1 = By.XPath("//form/input[1]");
-    private readonly By checkbox2 = By.XPath("//form/input[2]");
-    private readonly By checkboxesPageHeader = By.XPath($"//div/h3[contains(text(), 'Checkboxes')]");
+    private readonly By checkboxesContainer = By.Id("checkboxes");
+    private readonly By checkboxInputs = By.CssSelector("input[type='checkbox']");
+    private readonly By checkboxesPageHeader = By.XPath("//div[@class='example']");
 
     public CheckboxesPage(IWebDriver driver)
     {
         this.driver = driver;
     }
 
-    public void ClickCheckbox(By checkboxLocator)
-    {
-        driver.FindElement(checkboxLocator).Click();
-    }
-
-    public void ClickCheckbox1()
-    {
-        ElementUtils.ClickElementByXPath(driver, checkbox1, 20);
-    }
-
-    public void ClickCheckbox2()
-    {
-        ElementUtils.ClickElementByXPath(driver, checkbox2, 20);
-    }
-
-    public bool IsCheckbox1Selected()
-    {
-        return ElementUtils.IsElementSelected(driver, checkbox1);
-    }
-
-    public bool IsCheckbox2Selected()
-    {
-        return ElementUtils.IsElementSelected(driver, checkbox2);
-    }
-
     public bool IsCheckboxesPageOpened()
     {
-        return WaitUtils.WaitForElementVisible(driver, checkboxesPageHeader, 20).Displayed;
+        return WaitUtils.WaitForElementIsVisible(driver, checkboxesPageHeader, 20).Displayed;
     }
 
-    public bool IsCheckbox1Displayed()
+
+    private IWebElement GetCheckbox(int index)
+        {
+            var container = WaitUtils.WaitForElementIsVisible(driver, checkboxesContainer, 5);
+            return container.FindElements(checkboxInputs)[index];
+        }
+    public bool IsCheckboxDisplayed(int index) => GetCheckbox(index).Displayed;
+
+    public bool IsCheckboxSelected(int index) => GetCheckbox(index).Selected;
+
+    public void ClickCheckbox(int index) => GetCheckbox(index).Click();
+
+    public void SetCheckboxState(int index, bool isSelected)
     {
-        return WaitUtils.WaitForElementVisible(driver, checkbox1, 20).Displayed;
+        var checkbox = GetCheckbox(index);
+        if (checkbox.Selected != isSelected)
+            checkbox.Click();
     }
 
-    public bool IsCheckbox2Displayed()
-    {
-        return WaitUtils.WaitForElementVisible(driver, checkbox2, 20).Displayed;
-    }
+    public void Check(int index) => SetCheckboxState(index, true);
+    public void Uncheck(int index) => SetCheckboxState(index, false);
 }

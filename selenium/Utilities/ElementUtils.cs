@@ -13,12 +13,12 @@ public class ElementUtils
 
         element.Click();
 
-        WaitUtils.WaitForElement(driver, xpath2, timeoutSeconds);
+        WaitUtils.WaitForElementToBeClickable(driver, xpath2, timeoutSeconds);
     }
 
     public static void ClickElementByXPath(IWebDriver driver, By locator, int timeoutSeconds)
     {
-        var element = WaitUtils.WaitForElement(driver, locator, timeoutSeconds);
+        var element = WaitUtils.WaitForElementToBeClickable(driver, locator, timeoutSeconds);
         IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
         js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
         element.Click();
@@ -29,16 +29,15 @@ public class ElementUtils
         return driver.FindElement(locator).Selected;
     }
 
-    public static string IsElementText(IWebDriver driver, By locator)
+    public static string GetElementText(IWebDriver driver, By locator)
     {
         return driver.FindElement(locator).Text;
     }
 
     public static SelectElement GetDropdown(IWebDriver driver, By dropdownLocator, int timeoutSeconds)
     {
-        var dropdownElement = WaitUtils.WaitForElementVisible(driver, dropdownLocator, timeoutSeconds);
+        var dropdownElement = WaitUtils.WaitForElementIsVisible(driver, dropdownLocator, timeoutSeconds);
         return new SelectElement(dropdownElement);
     }
-
 }
 

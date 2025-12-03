@@ -4,7 +4,7 @@ public class LoginPage
 {
     private IWebDriver driver;
 
-    private readonly By loginPageHeader = By.XPath($"//div/h2[contains(text(), 'Login Page')]");
+    private readonly By loginPageHeader = By.XPath("//div[@class='example']");
     private readonly By usernameInput = By.Id("username");
     private readonly By passwordInput = By.Id("password");
     private readonly By loginButton = By.XPath("//button[@type='submit']");
@@ -26,17 +26,17 @@ public class LoginPage
 
     public bool IsUnsuccessLogin()
     {
-        return WaitUtils.WaitForElementVisible(driver, invaliLogindMessage, 20).Displayed;
+        return WaitUtils.WaitForElementIsVisible(driver, invaliLogindMessage, 20).Displayed;
     }
 
     public bool IsLoginPageOpened()
     {
-        return WaitUtils.WaitForElementVisible(driver, loginPageHeader, 20).Displayed;
+        return WaitUtils.WaitForElementIsVisible(driver, loginPageHeader, 20).Displayed;
     }
 
     public string GetInvalidLoginMessageText()
     {
-        var text = WaitUtils.WaitForElementVisible(driver, invaliLogindMessage, 20).Text;
+        var text = WaitUtils.WaitForElementIsVisible(driver, invaliLogindMessage, 20).Text;
         return System.Text.RegularExpressions.Regex.Match(text, @"^.*?!").Value.Trim();
     }
 }

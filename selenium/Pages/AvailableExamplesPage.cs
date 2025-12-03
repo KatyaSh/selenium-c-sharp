@@ -11,7 +11,7 @@ public class AvailableExamplesPage
     public void OpenExamplePage(string linkText)
     {
         var linkLocator = By.XPath($"//a[text()='{linkText}']");
-        var element = WaitUtils.WaitForElementVisible(driver, linkLocator, 20);
+        var element = WaitUtils.WaitForElementIsVisible(driver, linkLocator, 20);
         ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
         element.Click();
     }

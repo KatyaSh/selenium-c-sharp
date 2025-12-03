@@ -11,11 +11,10 @@ public class DropdownPageTests : BrowserActions_BaseTest
         availableExamplePage.OpenExamplePage("Dropdown");
         Assert.That(dropdownPage.IsDropdownPageOpened(), Is.True, "Dropdown Page is not opened");
 
-        var select = dropdownPage.SelectDropdown();
-        select.SelectByText("Option 2");
+        dropdownPage.SelectByText("Option 2");
 
-        string selectedText = select.SelectedOption.Text;
-        Assert.That(selectedText, Is.EqualTo("Option 2"), "Selected option is not correct");
+        var  selected = dropdownPage.GetSelectedOptionText();
+        Assert.That(selected, Is.EqualTo("Option 2"), "Selected option is not correct");
     }
 
     [Test]
@@ -27,13 +26,12 @@ public class DropdownPageTests : BrowserActions_BaseTest
         availableExamplePage.OpenExamplePage("Dropdown");
         Assert.That(dropdownPage.IsDropdownPageOpened(), Is.True, "Dropdown Page is not opened");
 
-        var select = dropdownPage.SelectDropdown();
-        select.SelectByText("Option 1");
-        string selectedText1 = select.SelectedOption.Text;
+        dropdownPage.SelectByText("Option 1");
+        var selectedText1 = dropdownPage.GetSelectedOptionText(); 
         Assert.That(selectedText1, Is.EqualTo("Option 1"), "Selected option is not correct");
 
-        select.SelectByText("Option 2");
-        string selectedText2 = select.SelectedOption.Text;
+        dropdownPage.SelectByText("Option 2");
+        var selectedText2 = dropdownPage.GetSelectedOptionText();
         Assert.That(selectedText2, Is.EqualTo("Option 2"), "Selected option is not correct");
     }
 
@@ -46,16 +44,8 @@ public class DropdownPageTests : BrowserActions_BaseTest
         availableExamplePage.OpenExamplePage("Dropdown");
         Assert.That(dropdownPage.IsDropdownPageOpened(), Is.True, "Dropdown Page is not opened");
 
-        var select = dropdownPage.SelectDropdown();
-        var options = select.Options;
-        Assert.That(options.Count, Is.EqualTo(3), "Number of available options is not correct");
+        var options = dropdownPage.GetSelectDropdownOptions();
+        Assert.That(options.Count, Is.EqualTo(3), "Dropdown options count is incorrect");
     }
-
-
-
-    //        var select = new SelectElement(selectElement);
-
-    //        select.SelectByText("Option 2");
-    //        Assert.That(select.SelectedOption.Text, Is.EqualTo("Option 2"));
 }
 
