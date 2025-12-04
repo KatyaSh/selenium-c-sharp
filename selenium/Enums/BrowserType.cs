@@ -1,5 +1,6 @@
 ﻿public enum BrowserType
 {
     Chrome,
-    Edge
+    Edge,
+    ChromeHeadless
 }
