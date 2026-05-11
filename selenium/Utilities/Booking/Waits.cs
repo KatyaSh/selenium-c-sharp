@@ -49,4 +49,46 @@ public class Waits
             return false;
         }
     }
+
+    public bool WaitForDisappear(By locator, int timeoutSeconds)
+    {
+        try
+        {
+            SetTimeout(timeoutSeconds);
+            return _wait.Until(driver =>
+            {
+                try
+                {
+                    var elements = driver.FindElements(locator);
+                    return elements.Count == 0 || !elements[0].Displayed;
+                }
+                catch
+                {
+                    return true;
+                }
+            });
+        }
+        catch
+        {
+            return false;
+        }
+    }    
+
+    public void WaitForFocusedWithTabNavigation(ElementActions elements, By locator, int timeoutSeconds)
+    {
+        SetTimeout(timeoutSeconds);
+        _wait.Until(_ =>
+        {
+            if (elements.IsElementFocused(locator))
+                return true;
+            elements.PressTab();
+            return false;
+        });
+    }
+
+    public void WaitUntil(Func<bool> condition, int timeoutSeconds)
+    {
+        SetTimeout(timeoutSeconds);
+        _wait.Until(_ => condition());
+    }
 }

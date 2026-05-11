@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
 public class ElementActions
@@ -29,6 +30,7 @@ public class ElementActions
             return false;
         }
     }
+
     public void Type(By locator, string text, int timeoutSeconds, bool clear = true)
     {
         var el = _waits.WaitForVisible(locator, timeoutSeconds);
@@ -120,6 +122,7 @@ public class ElementActions
         {
             if (TryClick(locator, timeoutSeconds)) return true;
         }
+
         return false;
     }
 
@@ -150,9 +153,7 @@ public class ElementActions
         var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(timeoutSeconds));
         wait.Until(d => d.WindowHandles.Count > 1);
 
-        var newWindow = _driver.WindowHandles
-            .First(h => h != currentWindow);
-
+        var newWindow = _driver.WindowHandles.First(h => h != currentWindow);
         _driver.SwitchTo().Window(newWindow);
     }
 
@@ -164,6 +165,168 @@ public class ElementActions
             if (els.Count > 0)
                 return els;
         }
+
         return Array.Empty<IWebElement>();
+    }
+
+    public void FocusBodyWithJs()
+    {
+        var js = (IJavaScriptExecutor)_driver;
+        js.ExecuteScript("document.body.focus();");
+    }
+
+    public void PressTab()
+    {
+        new Actions(_driver)
+            .SendKeys(Keys.Tab)
+            .Perform();
+    }
+
+    public void PressShiftTab()
+    {
+        new Actions(_driver)
+            .KeyDown(Keys.Shift)
+            .SendKeys(Keys.Tab)
+            .KeyUp(Keys.Shift)
+            .Perform();
+    }
+
+    public void PressEnter()
+    {
+        new Actions(_driver)
+            .SendKeys(Keys.Enter)
+            .Perform();
+    }
+
+    public void PressArrowDown()
+    {
+        new Actions(_driver)
+            .SendKeys(Keys.ArrowDown)
+            .Perform();
+    }
+
+    public void PressArrowRight()
+    {
+        new Actions(_driver)
+            .SendKeys(Keys.ArrowRight)
+            .Perform();
+    }
+
+    public void PressArrowUp()
+    {
+        new Actions(_driver)
+            .SendKeys(Keys.ArrowUp)
+            .Perform();
+    }
+
+    public IWebElement GetActiveElement()
+    {
+        var js = (IJavaScriptExecutor)_driver;
+        return (IWebElement)js.ExecuteScript("return document.activeElement;");
+    }
+
+    public bool IsElementFocused(params By[] locators)
+    {
+        try
+        {
+            var activeElement = GetActiveElement();
+
+            foreach (var locator in locators)
+            {
+                var found = _driver.FindElements(locator);
+
+                foreach (var element in found)
+                {
+                    if (activeElement.Equals(element))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public string GetActiveElementText()
+    {
+        try
+        {
+            return GetActiveElement().Text?.Trim() ?? string.Empty;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    public void TypeIntoActiveElement(string text)
+    {
+        var activeEl = GetActiveElement();
+        new Actions(_driver)
+            .Click(activeEl)
+            .SendKeys(text)
+            .Perform();
+    }
+
+    public void TypeIntoActiveElementSlowly(string text, int delayMs = 100)
+    {
+        var activeEl = GetActiveElement();
+        foreach (char c in text)
+        {
+            new Actions(_driver)
+                .Click(activeEl)
+                .SendKeys(c.ToString())
+                .Perform();
+
+            Thread.Sleep(delayMs);
+        }
+    }
+
+    public int CountFirstExisting(params By[] locators)
+    {
+        foreach (var locator in locators)
+        {
+            var els = _driver.FindElements(locator);
+            if (els.Count > 0)
+                return els.Count;
+        }
+
+        return 0;
+    }
+
+    public void FocusElementWithJs(By locator)
+    {
+        var element = _driver.FindElement(locator);
+        var js = (IJavaScriptExecutor)_driver;
+        js.ExecuteScript(
+            "arguments[0].scrollIntoView({block: 'center'}); arguments[0].focus();",
+            element);
+    }
+
+    public void ClickElementWithJs(By locator)
+    {
+        var element = _driver.FindElement(locator);
+        var js = (IJavaScriptExecutor)_driver;
+        js.ExecuteScript(
+            "arguments[0].scrollIntoView({block:'center'}); arguments[0].click();",
+            element);
+    }
+
+    public void ScrollAndClickFirstWithJs(By locator)
+    {
+        var element = _driver.FindElement(locator);
+        var js = (IJavaScriptExecutor)_driver;
+        js.ExecuteScript(
+            "arguments[0].scrollIntoView({block:'center'}); arguments[0].focus(); arguments[0].click();",
+            element);
+    }
+
+    public void BlurActiveElementWithJs()
+    {
+        var js = (IJavaScriptExecutor)_driver;
+        js.ExecuteScript("document.activeElement.blur();");
     }
 }

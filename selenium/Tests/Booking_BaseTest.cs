@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
-using System.Xml.Linq;
-
 
 public class Booking_BaseTest
 {
